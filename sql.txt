@@ -1,0 +1,71 @@
+USE Store
+
+--SELECT p.name, c.name, pr.name
+--FROM Products p JOIN Category c
+--ON p.id_category = c.id
+--JOIN Producer pr
+--ON p.id_producer = pr.id
+--WHERE p.id_producer <> 1 AND p.id_producer <> 2
+--AND pr.name NOT LIKE '%[АКМ]%' AND p.id_category <> 3
+
+--SELECT p.name, c.name, pr.name, ctr.name, del.date_of_delivery
+--FROM Products p JOIN Category c
+--ON p.id_category = c.id
+--JOIN Producer pr
+--ON p.id_producer = pr.id
+--JOIN Address a
+--ON pr.id_adress = a.id
+--JOIN City ct
+--ON a.id_city = ct.id
+--JOIN Region rg
+--ON ct.id_region = rg.id
+--JOIN Country ctr
+--ON rg.id_country = ctr.id
+--JOIN Delivery del
+--ON del.id_product = p.id
+--WHERE ctr.name <> 'Украина' AND  ctr.name <> 'Германия' AND del.date_of_delivery > '2023-10-10' AND del.price < 50
+
+
+--SELECT p.name, c.name, s.quantity, pr.name, sup.name
+--FROM Products p JOIN Category c
+--ON p.id_category = c.id
+--JOIN Producer pr
+--ON p.id_producer = pr.id
+
+--JOIN Delivery del
+--ON del.id_product = p.id
+--JOIN Supplier sup
+--ON del.id_supplier = sup.id
+
+--JOIN Sale s
+--ON s.id_product = p.id
+--WHERE p.id_category = 1 OR p.id_category = 3 AND s.quantity > 100
+
+--SELECT TOP 3 p.name, pr.name, c.name, del.date_of_delivery, del.price
+--FROM Products p JOIN Producer pr
+--ON p.id_producer = pr.id
+--JOIN Category c
+--ON p.id_category = c.id
+--JOIN Delivery del
+--ON del.id_product = p.id
+--ORDER BY p.name DESC
+
+SELECT p.name AS Продукты,
+pr.name AS Производитель,
+s.price AS [Цена продажи],
+s.quantity AS [Количество продажи],
+s.price * s.quantity AS [Общая стоимость],
+s.date_of_sale AS [Дата продажи],
+cat.name AS Категория,
+ctr.name + '-' + c.name + '-' + a.street AS Адресс
+FROM Products p JOIN Sale s
+ON s.id_product = p.id
+JOIN Producer pr ON p.id_producer = pr.id
+JOIN Category cat ON p.id_category = cat.id
+JOIN Address a ON pr.id_adress = a.id
+JOIN City c ON a.id_city = c.id
+JOIN Region reg ON c.id_region = reg.id
+JOIN Country ctr ON reg.id_country = ctr.id
+
+WHERE p.id_producer NOT IN (1, 2)
+ORDER BY 5 DESC
